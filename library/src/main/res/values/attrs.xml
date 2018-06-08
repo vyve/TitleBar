@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TitleBar">
+        <!--标题-->
+        <attr name="title" format="string" />
+        <!--右侧文本-->
+        <attr name="titleRightText" format="string" />
+        <!--右侧图标-->
+        <attr name="titleRightImg" format="reference"/>
+        <!--左侧图标-->
+        <attr name="titleLeftImg" format="reference"/>
+        <!--是否有返回按钮-->
+        <attr name="hasLeftView" format="boolean" />
+        <!--是否有返回文字-->
+        <attr name="hasLeftTextView" format="boolean"/>
+        <!--背景颜色-->
+        <attr name="titleBackground" format="color" />
+        <!--文本颜色-->
+        <attr name="titleTextColor" format="color" />
+        <!--左侧文本-->
+        <attr name="titleLeftText" format="string"/>
+        <!--标题文字大小-->
+        <attr name="titleTextSize" format="dimension"/>
+        <!--两边字体大小-->
+        <attr name="titleSidesTextSize" format="dimension"/>
+    </declare-styleable>
+
+</resources>
