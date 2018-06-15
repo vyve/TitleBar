@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -24,7 +27,7 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
     /**
      * 整个TitleBar
      */
-    private RelativeLayout titleBarView;
+    private LinearLayout titleBarView;
     /**
      * 左侧文字
      */
@@ -48,11 +51,15 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
     /**
      * 默认TitleBar背景
      */
-    private static final int DEFAULT_BACKGROUND = 0x00000000;
+    private static final int DEFAULT_BACKGROUND = 0xff3F51B5;
     /**
      * 默认字体颜色
      */
     private static final int DEFAULT_TEXT_COLOR = 0xffffffff;
+    /**
+     * 默认状态栏颜色
+     */
+    private static final int DEFAULT_STATUS_COLOR = 0x00000000;
     private RelativeLayout leftLy;
     private TitleBarLeftClick leftListener;
     private TitleBarRightClick rightListener;
@@ -68,6 +75,22 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
      * 点击右侧 跳转的Activity
      */
     private Class<?> rightActivity;
+    /**
+     * 状态栏高度
+     */
+    private int statusBarHeight;
+    /**
+     * 是否是沉浸式状态栏
+     */
+    private boolean isImmersion;
+    /**
+     * 用来占据状态栏的View
+     */
+    private TextView statusView;
+    /**
+     * 状态栏颜色
+     */
+    private int statusColor;
 
     public TitleBar(Context context) {
         this(context, null);
@@ -80,6 +103,7 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
     public TitleBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
+
         initView();
         initData(attrs);
 
@@ -94,6 +118,7 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         rightImgView = this.findViewById(R.id.titleBar_rightImg);
         titleTextView = this.findViewById(R.id.titleBar_title);
         leftLy = this.findViewById(R.id.titleBar_leftLy);
+        statusView = this.findViewById(R.id.titleBar_status);
         RelativeLayout rightLy = this.findViewById(R.id.titleBar_rightLy);
 
         leftLy.setOnClickListener(this);
@@ -101,6 +126,9 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
     }
 
     private void initData(AttributeSet attrs) {
+        //状态栏高度
+        statusBarHeight = getStatusBarHeight(context);
+        //获取自定义配置
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.TitleBar);
         String titleText = array.getString(R.styleable.TitleBar_title);
         String leftText = array.getString(R.styleable.TitleBar_titleLeftText);
@@ -111,6 +139,8 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         boolean hasLeftTextView = array.getBoolean(R.styleable.TitleBar_hasLeftTextView, false);
         int titleBackground = array.getColor(R.styleable.TitleBar_titleBackground, DEFAULT_BACKGROUND);
         int titleTextColor = array.getColor(R.styleable.TitleBar_titleTextColor, DEFAULT_TEXT_COLOR);
+        statusColor = array.getColor(R.styleable.TitleBar_statusColor, DEFAULT_STATUS_COLOR);
+        isImmersion = array.getBoolean(R.styleable.TitleBar_isImmersion, false);
         array.recycle();
 
         titleTextView.setText(titleText);
@@ -142,6 +172,38 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
             }
         } else {
             leftLy.setVisibility(GONE);
+        }
+
+        setImmersion(isImmersion);
+    }
+
+    /**
+     * 设置是否是沉浸式状态栏
+     */
+    public void setImmersion(boolean immersion) {
+        try {
+            isImmersion = immersion;
+            if (isImmersion) {
+                statusView.setVisibility(VISIBLE);
+                //沉浸式状态栏
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    Window window = ((Activity) context).getWindow();
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                            | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                    window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                    window.setStatusBarColor(0x00000000);
+                }
+
+                statusView.setHeight(statusBarHeight);
+                statusView.setBackgroundColor(statusColor);
+            } else {
+                statusView.setVisibility(GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -205,6 +267,18 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 获取状态栏高度
+     */
+    public static int getStatusBarHeight(Context context) {
+        int result = 0;
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = context.getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
     public interface TitleBarLeftClick {

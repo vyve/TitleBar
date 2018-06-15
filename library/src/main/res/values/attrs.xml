@@ -23,6 +23,10 @@
         <attr name="titleTextSize" format="dimension"/>
         <!--两边字体大小-->
         <attr name="titleSidesTextSize" format="dimension"/>
+        <!--是否是沉浸式-->
+        <attr name="isImmersion" format="boolean"/>
+        <!--状态栏颜色-->
+        <attr name="statusColor" format="color"/>
     </declare-styleable>
 
 </resources>
