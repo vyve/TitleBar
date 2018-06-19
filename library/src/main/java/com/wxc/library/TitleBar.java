@@ -7,6 +7,7 @@ import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -48,18 +49,6 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
      * 标题文字
      */
     private TextView titleTextView;
-    /**
-     * 默认TitleBar背景
-     */
-    private static final int DEFAULT_BACKGROUND = 0xff3F51B5;
-    /**
-     * 默认字体颜色
-     */
-    private static final int DEFAULT_TEXT_COLOR = 0xffffffff;
-    /**
-     * 默认状态栏颜色
-     */
-    private static final int DEFAULT_STATUS_COLOR = 0x00000000;
     private RelativeLayout leftLy;
     private TitleBarLeftClick leftListener;
     private TitleBarRightClick rightListener;
@@ -91,6 +80,30 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
      * 状态栏颜色
      */
     private int statusColor;
+    /**
+     * 默认TitleBar背景
+     */
+    private int mDefaultBackgroundColor;
+    /**
+     * 默认字体颜色
+     */
+    private int mDefaultTitleTextColor;
+    /**
+     * 默认标题字体大小
+     */
+    private float mDefaultTitleTextSize;
+    /**
+     * 默认两边字体大小
+     */
+    private float mDefaultSidesTextSize;
+    /**
+     * 默认左边图片
+     */
+    private int mDefaultLeftImg;
+    /**
+     * 默认状态栏颜色
+     */
+    private int mDefaultStatusColor;
 
     public TitleBar(Context context) {
         this(context, null);
@@ -105,8 +118,10 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         this.context = context;
 
         initView();
-        initData(attrs);
 
+        getDefaultConfig();
+
+        initData(attrs);
     }
 
     private void initView() {
@@ -133,16 +148,25 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         String titleText = array.getString(R.styleable.TitleBar_title);
         String leftText = array.getString(R.styleable.TitleBar_titleLeftText);
         String rightText = array.getString(R.styleable.TitleBar_titleRightText);
-        leftImg = array.getResourceId(R.styleable.TitleBar_titleLeftImg, R.drawable.back);
+        float titleTextSize = array.getDimension(R.styleable.TitleBar_titleTextSize, TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_SP, mDefaultTitleTextSize,
+                        getResources().getDisplayMetrics()));
+        float titleSidesTextSize = array.getDimension(R.styleable.TitleBar_titleSidesTextSize,TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_SP, mDefaultSidesTextSize,
+                        getResources().getDisplayMetrics()));
+        leftImg = array.getResourceId(R.styleable.TitleBar_titleLeftImg, mDefaultLeftImg);
         int rightImg = array.getResourceId(R.styleable.TitleBar_titleRightImg, -1);
         hasLeftView = array.getBoolean(R.styleable.TitleBar_hasLeftView, true);
         boolean hasLeftTextView = array.getBoolean(R.styleable.TitleBar_hasLeftTextView, false);
-        int titleBackground = array.getColor(R.styleable.TitleBar_titleBackground, DEFAULT_BACKGROUND);
-        int titleTextColor = array.getColor(R.styleable.TitleBar_titleTextColor, DEFAULT_TEXT_COLOR);
-        statusColor = array.getColor(R.styleable.TitleBar_statusColor, DEFAULT_STATUS_COLOR);
-        isImmersion = array.getBoolean(R.styleable.TitleBar_isImmersion, false);
+        int titleBackground = array.getColor(R.styleable.TitleBar_titleBackground, mDefaultBackgroundColor);
+        int titleTextColor = array.getColor(R.styleable.TitleBar_titleTextColor, mDefaultTitleTextColor);
+        statusColor = array.getColor(R.styleable.TitleBar_statusColor, mDefaultStatusColor);
+        isImmersion = array.getBoolean(R.styleable.TitleBar_isImmersion, isImmersion);
         array.recycle();
 
+        titleTextView.setTextSize(titleTextSize);
+        leftTextView.setTextSize(titleSidesTextSize);
+        rightTextView.setTextSize(titleSidesTextSize);
         titleTextView.setText(titleText);
         titleTextView.setTextColor(titleTextColor);
         leftTextView.setTextColor(titleTextColor);
@@ -175,6 +199,20 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         }
 
         setImmersion(isImmersion);
+
+    }
+
+    /**
+     * 获取默认配置
+     */
+    private void getDefaultConfig() {
+        mDefaultBackgroundColor = TitleBarOptions.getInstance().backgroundColor;
+        mDefaultTitleTextColor = TitleBarOptions.getInstance().titleTextColor;
+        mDefaultTitleTextSize = TitleBarOptions.getInstance().titleTextSize;
+        mDefaultLeftImg = TitleBarOptions.getInstance().leftImg;
+        mDefaultStatusColor=TitleBarOptions.getInstance().statusColor;
+        mDefaultSidesTextSize = TitleBarOptions.getInstance().titleSidesTextSize;
+        isImmersion = TitleBarOptions.getInstance().isImmersion;
     }
 
     /**
