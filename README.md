@@ -1,6 +1,15 @@
 # TitleBar
 ## 用法：
 #### 第一步：
+##### 1、工程根目录build.gradle中
+    allprojects {
+      repositories {
+        maven {
+            url "https://jitpack.io"
+        }
+     }
+    }
+##### 2、项目build.gradle中
     dependencies {
 	        implementation 'com.github.593476071:TitleBar:1.0.4'//选择最新版本
 	}
