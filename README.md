@@ -23,7 +23,7 @@
                 .setTitleTextSize(DisplayUtils.dp2px(this,18))//默认标题的字体大小(单位为像素 px)
                 .setTitleSidesTextSize(DisplayUtils.dp2px(this,12))//默认左右两边的字体大小(单位为像素 px)
                 .setTitleTextColor(0xff303F9F) //默认标题的字体颜色
-                .setLeftImg(R.mipmap.back); //默认左边和右边文字的大小
+                .setLeftImg(R.mipmap.back); //默认左边图片资源
 #### 第三步：
 ##### 在布局中使用
 ##### 注意：在布局中设置的属性优先级大于在Application中的设置的属性。
