@@ -11,7 +11,7 @@
     }
 ##### 2、项目build.gradle中
     dependencies {
-	        implementation 'com.github.593476071:TitleBar:1.0.4'//选择最新版本
+	        implementation 'com.github.593476071:TitleBar:1.0.5'//选择最新版本
 	}
 #### 第二步（不是必须）：
 ##### 开发者可选择在Application中初始化一些默认配置。
