@@ -91,11 +91,11 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
     /**
      * 默认标题字体大小
      */
-    private float mDefaultTitleTextSize;
+    private int mDefaultTitleTextSize;
     /**
      * 默认两边字体大小
      */
-    private float mDefaultSidesTextSize;
+    private int mDefaultSidesTextSize;
     /**
      * 默认左边图片
      */
@@ -148,12 +148,8 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         String titleText = array.getString(R.styleable.TitleBar_title);
         String leftText = array.getString(R.styleable.TitleBar_titleLeftText);
         String rightText = array.getString(R.styleable.TitleBar_titleRightText);
-        float titleTextSize = array.getDimension(R.styleable.TitleBar_titleTextSize, TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_SP, mDefaultTitleTextSize,
-                        getResources().getDisplayMetrics()));
-        float titleSidesTextSize = array.getDimension(R.styleable.TitleBar_titleSidesTextSize,TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_SP, mDefaultSidesTextSize,
-                        getResources().getDisplayMetrics()));
+        int titleTextSize = array.getDimensionPixelSize(R.styleable.TitleBar_titleTextSize,mDefaultTitleTextSize);
+        int titleSidesTextSize = array.getDimensionPixelSize(R.styleable.TitleBar_titleSidesTextSize,mDefaultSidesTextSize);
         leftImg = array.getResourceId(R.styleable.TitleBar_titleLeftImg, mDefaultLeftImg);
         int rightImg = array.getResourceId(R.styleable.TitleBar_titleRightImg, -1);
         hasLeftView = array.getBoolean(R.styleable.TitleBar_hasLeftView, true);
@@ -164,9 +160,9 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         isImmersion = array.getBoolean(R.styleable.TitleBar_isImmersion, isImmersion);
         array.recycle();
 
-        titleTextView.setTextSize(titleTextSize);
-        leftTextView.setTextSize(titleSidesTextSize);
-        rightTextView.setTextSize(titleSidesTextSize);
+        titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleTextSize);
+        leftTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleSidesTextSize);
+        rightTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleSidesTextSize);
         titleTextView.setText(titleText);
         titleTextView.setTextColor(titleTextColor);
         leftTextView.setTextColor(titleTextColor);
@@ -199,6 +195,7 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         }
 
         setImmersion(isImmersion);
+
 
     }
 

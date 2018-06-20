@@ -20,7 +20,7 @@ public class TitleBarOptions {
     /**
      * 标题文字大小
      */
-    public float titleTextSize=17;
+    public int titleTextSize=34;
     /**
      * 标题字体颜色
      */
@@ -33,7 +33,7 @@ public class TitleBarOptions {
     /**
      * 两边字体大小
      */
-    public float titleSidesTextSize= 14;
+    public int titleSidesTextSize= 26;
 
     /**
      * 是否是沉浸式
