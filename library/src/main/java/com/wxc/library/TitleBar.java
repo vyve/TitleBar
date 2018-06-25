@@ -82,9 +82,14 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
      */
     private int statusColor;
     /**
-     * 默认TitleBar背景
+     * 默认TitleBar背景颜色
      */
     private int mDefaultBackgroundColor;
+
+    /**
+     * 默认TitleBar背景图片
+     */
+    private int mDefaultBackgroundDrawable;
     /**
      * 默认字体颜色
      */
@@ -161,7 +166,7 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         hasLeftView = array.getBoolean(R.styleable.TitleBar_hasLeftView, true);
         boolean hasLeftTextView = array.getBoolean(R.styleable.TitleBar_hasLeftTextView, false);
         int titleBackground = array.getColor(R.styleable.TitleBar_titleBackground, mDefaultBackgroundColor);
-        int titleBackgroundDrawable = array.getResourceId(R.styleable.TitleBar_titleBackgroundDrawable, -1);
+        int titleBackgroundDrawable = array.getResourceId(R.styleable.TitleBar_titleBackgroundDrawable, mDefaultBackgroundDrawable);
         int titleTextColor = array.getColor(R.styleable.TitleBar_titleTextColor, mDefaultTitleTextColor);
         statusColor = array.getColor(R.styleable.TitleBar_statusColor, mDefaultStatusColor);
         isImmersion = array.getBoolean(R.styleable.TitleBar_isImmersion, isImmersion);
@@ -217,6 +222,7 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         mDefaultStatusColor=TitleBarOptions.getInstance().statusColor;
         mDefaultSidesTextSize = TitleBarOptions.getInstance().titleSidesTextSize;
         isImmersion = TitleBarOptions.getInstance().isImmersion;
+        mDefaultBackgroundDrawable = TitleBarOptions.getInstance().backgroundDrawable;
     }
 
     /**

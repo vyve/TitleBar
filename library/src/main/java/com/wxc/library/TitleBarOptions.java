@@ -39,6 +39,10 @@ public class TitleBarOptions {
      * 是否是沉浸式
      */
     public boolean isImmersion;
+    /**
+     * 背景图片
+     */
+    public int backgroundDrawable = -1;
 
     public static TitleBarOptions getInstance() {
         if (options == null) {
@@ -87,6 +91,10 @@ public class TitleBarOptions {
     }
     public TitleBarOptions immersion(boolean isImmersion){
         this.isImmersion = isImmersion;
+        return this;
+    }
+    public TitleBarOptions setBackgroundDrawable(int backgroundDrawable){
+        this.backgroundDrawable = backgroundDrawable;
         return this;
     }
 }
