@@ -17,13 +17,14 @@
 ##### 开发者可选择在Application中初始化一些默认配置。
 ##### 注意：在Application中设置的字体大小单位为像素（px）。
       TitleBarOptions.getInstance()
-                .setBackground(0xffFF4081) //默认背景颜色
+                //.setBackground(0xffFF4081) //默认背景颜色
                 .immersion(true) //设置是否是沉浸式状态栏
                 .setStatusColor(0xffFF4081) //默认状态栏颜色(沉浸式状态栏才有效)
                 .setTitleTextSize(DisplayUtils.dp2px(this,18))//默认标题的字体大小(单位为像素 px)
                 .setTitleSidesTextSize(DisplayUtils.dp2px(this,12))//默认左右两边的字体大小(单位为像素 px)
                 .setTitleTextColor(0xff303F9F) //默认标题的字体颜色
-                .setLeftImg(R.mipmap.back); //默认左边图片资源
+                .setLeftImg(R.mipmap.back)//默认左边图片资源
+		.setBackgroundDrawable(R.mipmap.timg); //设置背景图片
 #### 第三步：
 ##### 在布局中使用
 ##### 注意：在布局中设置的属性优先级大于在Application中的设置的属性。
@@ -62,4 +63,6 @@
         <attr name="isImmersion" format="boolean"/>
         <!--状态栏颜色-->
         <attr name="statusColor" format="color"/>
+	<!--背景图片-->
+        <attr name="titleBackgroundDrawable" format="reference"/>
     </declare-styleable>
