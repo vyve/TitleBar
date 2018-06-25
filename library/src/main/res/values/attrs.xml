@@ -27,6 +27,9 @@
         <attr name="isImmersion" format="boolean"/>
         <!--状态栏颜色-->
         <attr name="statusColor" format="color"/>
+        <!--背景图片-->
+        <attr name="titleBackgroundDrawable" format="reference"/>
+
     </declare-styleable>
 
 </resources>

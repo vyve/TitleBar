@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -104,6 +105,10 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
      * 默认状态栏颜色
      */
     private int mDefaultStatusColor;
+    /**
+     * 除去状态栏的布局
+     */
+    private RelativeLayout titleLy;
 
     public TitleBar(Context context) {
         this(context, null);
@@ -134,6 +139,7 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         titleTextView = this.findViewById(R.id.titleBar_title);
         leftLy = this.findViewById(R.id.titleBar_leftLy);
         statusView = this.findViewById(R.id.titleBar_status);
+        titleLy = this.findViewById(R.id.titleBar_ly);
         RelativeLayout rightLy = this.findViewById(R.id.titleBar_rightLy);
 
         leftLy.setOnClickListener(this);
@@ -155,6 +161,7 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         hasLeftView = array.getBoolean(R.styleable.TitleBar_hasLeftView, true);
         boolean hasLeftTextView = array.getBoolean(R.styleable.TitleBar_hasLeftTextView, false);
         int titleBackground = array.getColor(R.styleable.TitleBar_titleBackground, mDefaultBackgroundColor);
+        int titleBackgroundDrawable = array.getResourceId(R.styleable.TitleBar_titleBackgroundDrawable, -1);
         int titleTextColor = array.getColor(R.styleable.TitleBar_titleTextColor, mDefaultTitleTextColor);
         statusColor = array.getColor(R.styleable.TitleBar_statusColor, mDefaultStatusColor);
         isImmersion = array.getBoolean(R.styleable.TitleBar_isImmersion, isImmersion);
@@ -168,7 +175,8 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         leftTextView.setTextColor(titleTextColor);
         rightTextView.setTextColor(titleTextColor);
 
-        titleBarView.setBackgroundColor(titleBackground);
+        setBackground(titleBackground);
+        setBackgroundDrawable(titleBackgroundDrawable);
 
         if (rightText != null) {
             rightTextView.setVisibility(VISIBLE);
@@ -195,7 +203,6 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         }
 
         setImmersion(isImmersion);
-
 
     }
 
@@ -240,6 +247,34 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 设置TitleBar背景图片
+     * 注意：不能与setBackgroundColor()混用
+     */
+    public void setBackgroundDrawable(int drawable) {
+        if (drawable==-1){
+            return;
+        }
+        LinearLayout.LayoutParams titleBarParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        if (isImmersion) {
+            titleBarParams.height = statusBarHeight + titleLy.getLayoutParams().height;
+        } else {
+            titleBarParams.height = titleLy.getLayoutParams().height;
+        }
+        titleBarView.setLayoutParams(titleBarParams);
+        titleBarView.setBackgroundResource(drawable);
+        statusView.setBackgroundColor(0x00000000);
+        titleLy.setBackgroundColor(0x00000000);
+    }
+
+    /**
+     * 设置TitleBar背景颜色
+     * 注意：不能与setBackgroundDrawable()混用
+     */
+    public void setBackground(int color) {
+        titleBarView.setBackgroundColor(color);
     }
 
     /**
