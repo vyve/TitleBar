@@ -3,6 +3,8 @@
     <declare-styleable name="TitleBar">
         <!--标题-->
         <attr name="title" format="string" />
+        <!--除去状态栏以后的布局高度  单位是   dp-->
+        <attr name="titleHeight" format="integer"/>
         <!--右侧文本-->
         <attr name="titleRightText" format="string" />
         <!--右侧图标-->
@@ -29,7 +31,10 @@
         <attr name="statusColor" format="color"/>
         <!--背景图片-->
         <attr name="titleBackgroundDrawable" format="reference"/>
-
+        <!--自定义布局-->
+        <attr name="contentLayout" format="reference"/>
+        <!--color的优先级是否比drawable高-->
+        <attr name="colorHighPriority" format="boolean"/>
     </declare-styleable>
 
 </resources>

@@ -43,6 +43,11 @@ public class TitleBarOptions {
      * 背景图片
      */
     public int backgroundDrawable = -1;
+    /**
+     * 出去状态栏以后的布局高度
+     * 单位  dp
+     */
+    public int titleBarHeight = 35;
 
     public static TitleBarOptions getInstance() {
         if (options == null) {
@@ -95,6 +100,10 @@ public class TitleBarOptions {
     }
     public TitleBarOptions setBackgroundDrawable(int backgroundDrawable){
         this.backgroundDrawable = backgroundDrawable;
+        return this;
+    }
+    public TitleBarOptions setTitleBarHeight(int height){
+        this.titleBarHeight = height;
         return this;
     }
 }

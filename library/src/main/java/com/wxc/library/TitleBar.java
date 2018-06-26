@@ -22,6 +22,11 @@ import android.widget.TextView;
 /**
  * 标题
  * Created by 王新超 on 2018/3/12.
+ * <p>
+ * 在设置backgroundDrawable 和 backgroundColor时，drawable无论在什么情况下优先级始终大于color
+ * eg：如果在application中设置里默认drawable，则在布局里设置状态栏color和背景color都将无效。
+ * 解决方案：在布局中添加属性 app:colorHighPriority="true"
+ * 这样color将会覆盖drawable
  */
 
 public class TitleBar extends LinearLayout implements View.OnClickListener {
@@ -115,6 +120,22 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
      */
     private RelativeLayout titleLy;
 
+    /**
+     * 默认出去状态栏后的布局高度
+     * <p>
+     * 单位为  dp
+     */
+    private int mDefaultTitleBarHeight = 35;
+    /**
+     * 自定义Title布局
+     */
+    private View contentLayout;
+    /**
+     * backgroundColor 的优先级是否比backgroundDrawable的优先级高
+     * 默认 false
+     */
+    private boolean colorHighPriority;
+
     public TitleBar(Context context) {
         this(context, null);
     }
@@ -153,14 +174,14 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
 
     private void initData(AttributeSet attrs) {
         //状态栏高度
-        statusBarHeight = getStatusBarHeight(context);
+        statusBarHeight = Utils.getStatusBarHeight(context);
         //获取自定义配置
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.TitleBar);
         String titleText = array.getString(R.styleable.TitleBar_title);
         String leftText = array.getString(R.styleable.TitleBar_titleLeftText);
         String rightText = array.getString(R.styleable.TitleBar_titleRightText);
-        int titleTextSize = array.getDimensionPixelSize(R.styleable.TitleBar_titleTextSize,mDefaultTitleTextSize);
-        int titleSidesTextSize = array.getDimensionPixelSize(R.styleable.TitleBar_titleSidesTextSize,mDefaultSidesTextSize);
+        int titleTextSize = array.getDimensionPixelSize(R.styleable.TitleBar_titleTextSize, mDefaultTitleTextSize);
+        int titleSidesTextSize = array.getDimensionPixelSize(R.styleable.TitleBar_titleSidesTextSize, mDefaultSidesTextSize);
         leftImg = array.getResourceId(R.styleable.TitleBar_titleLeftImg, mDefaultLeftImg);
         int rightImg = array.getResourceId(R.styleable.TitleBar_titleRightImg, -1);
         hasLeftView = array.getBoolean(R.styleable.TitleBar_hasLeftView, true);
@@ -168,48 +189,72 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         int titleBackground = array.getColor(R.styleable.TitleBar_titleBackground, mDefaultBackgroundColor);
         int titleBackgroundDrawable = array.getResourceId(R.styleable.TitleBar_titleBackgroundDrawable, mDefaultBackgroundDrawable);
         int titleTextColor = array.getColor(R.styleable.TitleBar_titleTextColor, mDefaultTitleTextColor);
+        int titleBarHeight = array.getInteger(R.styleable.TitleBar_titleHeight, mDefaultTitleBarHeight);
         statusColor = array.getColor(R.styleable.TitleBar_statusColor, mDefaultStatusColor);
         isImmersion = array.getBoolean(R.styleable.TitleBar_isImmersion, isImmersion);
+        int contentLayoutId = array.getResourceId(R.styleable.TitleBar_contentLayout, -1);
+        colorHighPriority = array.getBoolean(R.styleable.TitleBar_colorHighPriority, false);
         array.recycle();
 
-        titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleTextSize);
-        leftTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleSidesTextSize);
-        rightTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleSidesTextSize);
-        titleTextView.setText(titleText);
-        titleTextView.setTextColor(titleTextColor);
-        leftTextView.setTextColor(titleTextColor);
-        rightTextView.setTextColor(titleTextColor);
-
-        setBackground(titleBackground);
-        setBackgroundDrawable(titleBackgroundDrawable);
-
-        if (rightText != null) {
-            rightTextView.setVisibility(VISIBLE);
-            rightImgView.setVisibility(GONE);
-            rightTextView.setText(rightText);
-        }
-        if (rightImg != -1) {
-            rightImgView.setVisibility(VISIBLE);
-            rightTextView.setVisibility(GONE);
-            rightImgView.setImageResource(rightImg);
-        }
-
-        if (hasLeftView) {
-            leftLy.setVisibility(VISIBLE);
-            leftImgView.setImageResource(leftImg);
-            if (hasLeftTextView) {
-                leftTextView.setVisibility(VISIBLE);
-                leftTextView.setText(leftText);
-            } else {
-                leftTextView.setVisibility(GONE);
-            }
-        } else {
-            leftLy.setVisibility(GONE);
-        }
-
         setImmersion(isImmersion);
+        setTitleBarHeight(titleBarHeight);
+        setTitleBackgroundColor(titleBackground);
+        setTitleBackgroundDrawable(titleBackgroundDrawable);
+        setContentLayout(contentLayoutId);
 
+        if (contentLayoutId == -1) {
+            titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleTextSize);
+            leftTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSidesTextSize);
+            rightTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSidesTextSize);
+            titleTextView.setText(titleText);
+            titleTextView.setTextColor(titleTextColor);
+            leftTextView.setTextColor(titleTextColor);
+            rightTextView.setTextColor(titleTextColor);
+
+            if (rightText != null) {
+                rightTextView.setVisibility(VISIBLE);
+                rightImgView.setVisibility(GONE);
+                rightTextView.setText(rightText);
+            }
+            if (rightImg != -1) {
+                rightImgView.setVisibility(VISIBLE);
+                rightTextView.setVisibility(GONE);
+                rightImgView.setImageResource(rightImg);
+            }
+
+            if (hasLeftView) {
+                leftLy.setVisibility(VISIBLE);
+                leftImgView.setImageResource(leftImg);
+                if (hasLeftTextView) {
+                    leftTextView.setVisibility(VISIBLE);
+                    leftTextView.setText(leftText);
+                } else {
+                    leftTextView.setVisibility(GONE);
+                }
+            } else {
+                leftLy.setVisibility(GONE);
+            }
+        }
     }
+
+    /**
+     * 自定义标题布局
+     *
+     * @param layoutId 布局id
+     */
+    private void setContentLayout(int layoutId) {
+        if (layoutId == -1) {
+            return;
+        }
+        contentLayout = LayoutInflater.from(context).inflate(layoutId, null, false);
+        titleLy.removeAllViews();
+        titleLy.addView(contentLayout, ViewGroup.LayoutParams.MATCH_PARENT, titleLy.getLayoutParams().height);
+    }
+
+    public View getContentLayout() {
+        return contentLayout;
+    }
+
 
     /**
      * 获取默认配置
@@ -219,10 +264,20 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         mDefaultTitleTextColor = TitleBarOptions.getInstance().titleTextColor;
         mDefaultTitleTextSize = TitleBarOptions.getInstance().titleTextSize;
         mDefaultLeftImg = TitleBarOptions.getInstance().leftImg;
-        mDefaultStatusColor=TitleBarOptions.getInstance().statusColor;
+        mDefaultStatusColor = TitleBarOptions.getInstance().statusColor;
         mDefaultSidesTextSize = TitleBarOptions.getInstance().titleSidesTextSize;
         isImmersion = TitleBarOptions.getInstance().isImmersion;
         mDefaultBackgroundDrawable = TitleBarOptions.getInstance().backgroundDrawable;
+        mDefaultTitleBarHeight = TitleBarOptions.getInstance().titleBarHeight;
+    }
+
+    /**
+     * 设置TitleBar除去状态栏以后的布局高度
+     */
+    public void setTitleBarHeight(int height) {
+        LinearLayout.LayoutParams titleParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        titleParams.height = Utils.dp2px(context, height);
+        titleLy.setLayoutParams(titleParams);
     }
 
     /**
@@ -257,10 +312,10 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
 
     /**
      * 设置TitleBar背景图片
-     * 注意：不能与setBackgroundColor()混用
+     * 注意：setBackgroundColor()将失效
      */
-    public void setBackgroundDrawable(int drawable) {
-        if (drawable==-1){
+    public void setTitleBackgroundDrawable(int drawable) {
+        if (drawable == -1) {
             return;
         }
         LinearLayout.LayoutParams titleBarParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -270,7 +325,10 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
             titleBarParams.height = titleLy.getLayoutParams().height;
         }
         titleBarView.setLayoutParams(titleBarParams);
-        titleBarView.setBackgroundResource(drawable);
+        if (colorHighPriority){
+            return;
+        }
+        titleBarView.setBackground(context.getResources().getDrawable(drawable));
         statusView.setBackgroundColor(0x00000000);
         titleLy.setBackgroundColor(0x00000000);
     }
@@ -279,7 +337,7 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
      * 设置TitleBar背景颜色
      * 注意：不能与setBackgroundDrawable()混用
      */
-    public void setBackground(int color) {
+    public void setTitleBackgroundColor(int color) {
         titleBarView.setBackgroundColor(color);
     }
 
@@ -345,17 +403,6 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         }
     }
 
-    /**
-     * 获取状态栏高度
-     */
-    public static int getStatusBarHeight(Context context) {
-        int result = 0;
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = context.getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
 
     public interface TitleBarLeftClick {
         /**
