@@ -28,10 +28,10 @@
 #### 第三步：
 ##### 在布局中使用
 ##### 注意：1、在布局中设置的属性优先级大于在Application中的设置的属性。
-#####      2、在设置backgroundDrawable 和 backgroundColor时，drawable无论在什么情况下优先级始终大于color
-#####      eg：如果在application中设置里默认drawable，则在布局里设置状态栏color和背景color都将无效。
-#####      解决方案：在布局中添加属性 app:colorHighPriority="true" ，这样color将会覆盖drawable
-
+##### 	2、在设置backgroundDrawable 和 backgroundColor时，drawable无论在什么情况下优先级始终大于color
+#####    eg：如果在application中设置里默认drawable，则在布局里设置状态栏color和背景color都将无效。
+#####    解决方案：在布局中添加属性 app:colorHighPriority="true" ，这样color将会覆盖drawable
+#####   3、属性titleHeight的值不带单位，默认是dp值，意思为除去状态栏剩下的标题的高度。
      <com.wxc.library.TitleBar
         android:id="@+id/titleBar"
         app:title="首页"
@@ -76,4 +76,8 @@
         <attr name="statusColor" format="color"/>
 	<!--背景图片-->
         <attr name="titleBackgroundDrawable" format="reference"/>
+	 <!--自定义布局-->
+        <attr name="contentLayout" format="reference"/>
+        <!--color的优先级是否比drawable高-->
+        <attr name="colorHighPriority" format="boolean"/>
     </declare-styleable>
