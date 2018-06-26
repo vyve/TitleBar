@@ -251,6 +251,9 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
         titleLy.addView(contentLayout, ViewGroup.LayoutParams.MATCH_PARENT, titleLy.getLayoutParams().height);
     }
 
+    /**
+     * 获取自定义View的布局 自己做事件处理
+     */
     public View getContentLayout() {
         return contentLayout;
     }
