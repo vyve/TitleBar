@@ -1,6 +1,6 @@
 # TitleBar
 
- ![image](https://github.com/593476071/TitleBar/library/raw/master/image/preview.jpg)
+ ![image](https://github.com/593476071/TitleBar/raw/master/preview.jpg)
 
 ## 用法：
 #### 第一步：
