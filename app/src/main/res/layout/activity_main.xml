@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <com.wxc.library.TitleBar
+        android:id="@+id/titleBar"
+        app:title="首页"
+        app:titleBackground="#0f0"
+        app:hasLeftTextView="true"
+        app:titleLeftText="返回"
+        app:isImmersion="true"
+        app:titleTextSize="20dp"
+        app:titleHeight="100"
+        app:statusColor="@color/colorAccent"
+        app:colorHighPriority="true"
+        app:contentLayout="@layout/layout_title"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"/>
+
+</LinearLayout>
