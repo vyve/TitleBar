@@ -11,7 +11,7 @@
     }
 ##### 2、项目build.gradle中
     dependencies {
-	        implementation 'com.github.593476071:TitleBar:1.0.6'//选择最新版本
+	        implementation 'com.github.593476071:TitleBar:1.0.7'//选择最新版本
 	}
 #### 第二步（不是必须）：
 ##### 开发者可选择在Application中初始化一些默认配置。
@@ -27,14 +27,25 @@
 		.setBackgroundDrawable(R.mipmap.timg); //设置背景图片
 #### 第三步：
 ##### 在布局中使用
-##### 注意：在布局中设置的属性优先级大于在Application中的设置的属性。
-    <com.wxc.library.TitleBar
+##### 注意：1、在布局中设置的属性优先级大于在Application中的设置的属性。
+#####      2、在设置backgroundDrawable 和 backgroundColor时，drawable无论在什么情况下优先级始终大于color
+#####      eg：如果在application中设置里默认drawable，则在布局里设置状态栏color和背景color都将无效。
+#####      解决方案：在布局中添加属性 app:colorHighPriority="true" ，这样color将会覆盖drawable
+
+     <com.wxc.library.TitleBar
+        android:id="@+id/titleBar"
         app:title="首页"
+        app:titleBackground="#0f0"
         app:hasLeftTextView="true"
-        app:titleLeftText="哈哈"
-        app:isImmersion="false"
+        app:titleLeftText="返回"
+        app:isImmersion="true"
+        app:titleTextSize="20dp"
+        app:titleHeight="100"
+        app:statusColor="@color/colorAccent"
+        app:colorHighPriority="true"
+        app:contentLayout="@layout/layout_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="100dp"/>
 ## 自定义属性说明
     <declare-styleable name="TitleBar">
         <!--标题-->
