@@ -47,16 +47,28 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"/>
 ## 自定义布局
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:background="#0f0"
-        android:gravity="center"
-        android:text="哈哈哈哈哈哈"
-        android:layout_width="match_parent"
-        android:layout_height="30dp" />
+#### 新建布局文件layout_title.xml
+##### 注意：新建的布局文件的跟布局高度不能超过自定义添加的app:titleHeight="100"的高度，控件默认高度为35。
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+    	<TextView
+          android:layout_width="match_parent"
+          android:layout_height="30dp"
+          android:background="#0f0"
+          android:gravity="center"
+          android:text="哈哈哈哈哈哈" />
 	</LinearLayout>
+#### 添加属性 app:contentLayout="@layout/layout_title"
+#### 在页面中获取该布局文件，自定义处理事件。
+	View contentLayout = titleBar.getContentLayout();
+        contentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this,"哈哈",Toast.LENGTH_SHORT).show();
+            }
+        });
 ## 自定义属性说明
     <declare-styleable name="TitleBar">
         <!--标题-->
