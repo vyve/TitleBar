@@ -242,7 +242,7 @@ public class TitleBar extends LinearLayout implements View.OnClickListener {
      *
      * @param layoutId 布局id
      */
-    private void setContentLayout(int layoutId) {
+    public void setContentLayout(int layoutId) {
         if (layoutId == -1) {
             return;
         }

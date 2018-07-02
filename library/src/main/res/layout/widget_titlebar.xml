@@ -89,8 +89,8 @@
 
                 <ImageView
                     android:id="@+id/titleBar_rightImg"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_gravity="center_vertical"
                     android:visibility="gone" />
             </FrameLayout>
