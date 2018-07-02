@@ -1,4 +1,7 @@
 # TitleBar
+
+ ![image](https://github.com/593476071/TitleBar/raw/master/preview.jpg)
+
 ## 用法：
 #### 第一步：
 ##### 1、工程根目录build.gradle中
